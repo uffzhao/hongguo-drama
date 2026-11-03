@@ -169,3 +169,19 @@ https://github.com/dawei233/hongguo-drama
 
 二十四、4.3 网页扫码登录与 APP 观看记录（已发布）
 新增独立「登录管理」页，通过红果官网二维码登录账号，读取最近 50 部 APP 观看记录并支持剧名搜索和继续播放。登录态使用系统安全存储加密，与普通数据备份分离；不接入手机号验证码。APP 记录不混入本机观看历史，也不批量导入或上传。扫码协议参考 tsukiyo-zero/hongguoTV（GPL-3.0-only）并保留来源说明。正式发行与验证边界见 docs/release-4.3.md。
+
+二十五、Android 移植（2026-11-03）
+基于 jackotom/hongguo-drama v5.4 移植到 Android 平台。
+上游仓库：https://github.com/jackotom/hongguo-drama
+Android 分支仓库：https://github.com/uffzhao/hongguo-drama
+
+主要修改内容：
+  1. 引入 Capacitor 6 将 React 渲染层打包到 Android WebView
+  2. 核心取源（hongguo.js / app-source.js）、解密（CENC-AES-CTR）、选流逻辑迁入 WebView 运行，
+     对 fs / crypto / child_process 等 Node 接口做平台适配（Capacitor 插件 + Web API polyfill）
+  3. ffmpeg 转码与合并改用 Android 原生库（mobile-ffmpeg）
+  4. UI 按手机屏幕适配：竖屏优先、触控操作、状态栏/导航栏/刘海屏沉浸、国产 ROM 兼容
+  5. 下载与播放使用 Android 本地存储与系统媒体能力
+
+本修改版本整体继续以 GNU General Public License v3.0 授权，保留所有上游作者、修改声明与第三方许可。
+完整源码见本仓库 android 分支；分发 APK 时对应源码通过本仓库公开提供。

@@ -1,0 +1,90 @@
+/* ===== 移动端适配（Android / Capacitor） ===== */
+
+/* 安全区：刘海屏 / 状态栏 / 底部手势条 */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* 顶部工具栏增加状态栏高度 */
+.window-toolbar {
+  padding-top: calc(var(--safe-top) + 0px) !important;
+}
+
+/* 竖屏模式下的紧凑导航改为底部 Tab 栏 */
+.layout-portrait .compact-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  padding: 4px 4px calc(var(--safe-bottom) + 4px);
+  border-top: 1px solid var(--border);
+  border-bottom: none;
+  background: var(--sidebar-bg);
+}
+
+.layout-portrait .compact-navigation button {
+  min-height: 48px;
+  padding: 6px 2px;
+  font-size: 10px;
+  border-radius: 8px;
+}
+
+/* 主内容区留出底部导航高度 */
+.layout-portrait .main-content {
+  padding-bottom: calc(64px + var(--safe-bottom)) !important;
+}
+
+/* 只显示 5 个核心导航项，其余隐藏 */
+.layout-portrait .compact-navigation button:nth-child(n+6) {
+  display: none;
+}
+
+/* 播放器全屏时隐藏底部导航 */
+.layout-portrait.player-focused .compact-navigation {
+  display: none !important;
+}
+
+/* 侧边栏在移动端作为抽屉（可滑出） */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+  }
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+  .sidebar-window-drag {
+    height: calc(var(--safe-top) + 8px) !important;
+  }
+}
+
+/* 触控优化：按钮最小点击区域 */
+button, .sidebar-item, .compact-navigation button {
+  min-height: 44px;
+}
+
+/* 滚动平滑 */
+.main-content {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 禁止文本选中的拖拽感 */
+.sidebar-item {
+  -webkit-touch-callout: none;
+}
+
+/* 播放器适配竖屏手机 */
+.layout-portrait .player-container {
+  height: calc(100vh - 64px - var(--safe-top) - var(--safe-bottom)) !important;
+}
